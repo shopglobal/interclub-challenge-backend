@@ -5,6 +5,8 @@
  * @return {Function}            function with endpoint callback signature
  */
 function getMembersList (MembersModel) {
+  if (!MembersModel) throw new Error('Members Model is missing');
+
   return async function (req, res) {
     // Define members variable
     let members;
