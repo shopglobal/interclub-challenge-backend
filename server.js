@@ -4,17 +4,15 @@ const cors = require('cors');
 
 const app = express();
 
-const { api } = require('./routes');
+const routers = require('./routes');
+const { assignRouteDynamicaly } = require('./helper');
 
 mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost:27017/interclub-challenge', { useMongoClient: true });
 
 app.use(cors());
 
-Object.keys(api).forEach(endpoint => {
-  const router = api[endpoint];
-  app.use('/api', router);
-});
+assignRouteDynamicaly(app, routers);
 
 app.use('*', (req, res) => {
   res.status(404).send('Not Found');
