@@ -18,7 +18,7 @@ const TransactionSchema = new mongoose.Schema({
 
   type: {
     type: String,
-    enaum: ['income', 'expense'],
+    enum: ['income', 'expense'],
   },
 });
 

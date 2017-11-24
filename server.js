@@ -17,7 +17,7 @@ const app = express();
 app.set('port', PORT);
 app.use(cors());
 
-
+console.log(routers)
 // Assign all api endpoints
 assignRouteDynamicaly(app, routers);
 

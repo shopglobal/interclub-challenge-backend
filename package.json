@@ -17,7 +17,8 @@
     "jest": "^21.2.1",
     "lodash": "^4.17.4",
     "moment": "^2.19.1",
-    "mongoose": "^4.12.3"
+    "mongoose": "^4.12.3",
+    "validator": "^9.1.2"
   },
   "devDependencies": {
     "faker": "^4.1.0",
