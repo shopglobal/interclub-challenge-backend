@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 
 const MemberSchema = new mongoose.Schema({
-    first_name: {
-        type: String,
-        required: true
-    },
+  first_name: {
+    type: String,
+    required: true,
+  },
 
-    last_name: {
-        type: String,
-        required: true
-    },
+  last_name: {
+    type: String,
+    required: true,
+  },
 
-    number: Number,
+  number: Number,
 
-    email: String
+  email: String,
 });
 
 module.exports = mongoose.model('Member', MemberSchema);
