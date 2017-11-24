@@ -1,24 +1,35 @@
+/* eslint-disable no-console */
+
+// Import node packages
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 
+// Import modules
+const { PORT, DATABASE_URL } = require('./config/env');
+const connectToDatabase = require('./config/mongoose');
+const { assignRouteDynamicaly } = require('./helper');
+const routers = require('./routes');
+
+// Setup express instance
 const app = express();
 
-const routers = require('./routes');
-const { assignRouteDynamicaly } = require('./helper');
-
-mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost:27017/interclub-challenge', { useMongoClient: true });
-
+// Setup middlewares
+app.set('port', PORT);
 app.use(cors());
 
+
+// Assign all api endpoints
 assignRouteDynamicaly(app, routers);
 
+// Assign default endpoint to return 404
 app.use('*', (req, res) => {
   res.status(404).send('Not Found');
 });
 
-const PORT = 4000;
-app.listen(PORT, () => {
-  console.log(`Server listening on Port ${PORT}`);
+// Connect to MongoDB
+connectToDatabase(DATABASE_URL);
+
+// Start express server
+app.listen(app.get('port'), () => {
+  console.log(`Server listening on Port ${app.get('port')}`);
 });
