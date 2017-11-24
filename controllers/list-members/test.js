@@ -23,7 +23,7 @@ describe('list-members module', () => {
       expect(getMembersListWithoutFirstArg).toThrow('Members Model is missing');
     });
 
-    it('should return list of users', async done => {
+    it('should return list of users', done => {
       const mockMemberList = [
         {
           _id: '5a1710d301c99584f16a222c',
@@ -54,6 +54,29 @@ describe('list-members module', () => {
         json (arg) {
           expect(arg.length).toEqual(mockMemberList.length);
           done();
+        },
+      };
+
+      getMembersList(MembersModelMock)({}, mockedResFunction);
+    });
+
+    it('should catch error', done => {
+      const MembersModelMock = {
+        find () {
+          throw new Error('Error while fetching list of members');
+        },
+      };
+
+      // Mock rsponse function, to see if it is executed correctly
+      const mockedResFunction = {
+        status (statusCode) {
+          expect(statusCode).toEqual(400);
+          return {
+            send (errorString) {
+              expect(errorString).toEqual('Error: Error while fetching list of members');
+              done();
+            },
+          };
         },
       };
 
