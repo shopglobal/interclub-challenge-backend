@@ -8,10 +8,12 @@ function getTransactionsList (TranscationsModel) {
   if (!TranscationsModel) throw new Error('Transactions Model is missing');
   return async function (req, res) {
     // Get query params
-    const { sort, skip, limit } = req.params;
+    const { sort, skip, limit, id } = req.query;
+
+    const query = id ? { _id: id } : {};
 
     // Define transactions variable
-    let transactions = TranscationsModel.find({});
+    let transactions = TranscationsModel.find(query);
 
     if (sort) transactions = transactions.sort(JSON.parse(sort));
     if (skip) transactions = transactions.skip(parseInt(skip, 10));

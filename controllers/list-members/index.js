@@ -10,9 +10,13 @@ function getMembersList (MembersModel) {
     // Define members variable
     let members;
 
+    const { id } = req.query;
+
+    const query = id ? { _id: id } : {};
+
     // Try to fetch members
     try {
-      members = await MembersModel.find({}).sort({ number: 1 });
+      members = await MembersModel.find(query).sort({ number: 1 });
     } catch (fetchMembersError) {
       return res.status(400).send(`Error: ${fetchMembersError.message}`);
     }
