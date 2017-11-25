@@ -214,4 +214,152 @@ describe('transaction-summary module', () => {
       expect(buildSummaryPipeline(queryPipe)).toMatchObject(expectedObject);
     });
   });
+
+  describe('getTransactionSummary function', () => {
+    it('should be a function', () => {
+      expect(typeof getTransactionSummary).toEqual('function');
+    });
+
+    it('should return missing Transactions model error', () => {
+      function getTransactionSummaryWithoutTranscationsModel () {
+        getTransactionSummary({});
+      }
+
+      expect(getTransactionSummaryWithoutTranscationsModel)
+        .toThrow('Transactions Model is missing');
+    });
+
+    it('should return missing mongoose error', () => {
+      function getTransactionSummaryWithoutMongoose () {
+        getTransactionSummary({ TransactionsModel: true });
+      }
+
+      expect(getTransactionSummaryWithoutMongoose)
+        .toThrow('mongoose is missing');
+    });
+
+    it('should be a currying function', () => {
+      const validArgs =
+        { TransactionsModel: true, mongoose: { Types: { ObjectId: true } } };
+
+      expect(typeof getTransactionSummary(validArgs)).toEqual('function');
+    });
+
+    it('should return missing member id error', done => {
+      const validArgs =
+        { TransactionsModel: true, mongoose: { Types: { ObjectId: true } } };
+
+      const mockReq = {
+        params: {
+          member: false,
+          start: new Date(),
+          end: new Date(),
+        },
+      };
+
+      const mockRes = {
+        status (statusCode) {
+          expect(statusCode).toEqual(400);
+          return {
+            send (error) {
+              expect(error).toEqual('Error: Member ID is missing');
+              done();
+            },
+          };
+        },
+      };
+
+      getTransactionSummary(validArgs)(mockReq, mockRes);
+    });
+
+    it('should catch aggregateError error', done => {
+      // Define aggregate error message to be caught
+      const aggregateErrorMessage = 'Aggregate error';
+
+      // Valid mocked args
+      const validArgs = {
+        TransactionsModel: {
+          async aggregate () {
+            throw new Error(aggregateErrorMessage);
+          },
+        },
+        mongoose: {
+          Types: {
+            ObjectId: true,
+          },
+        },
+        buildSummaryQuery () {
+          return [];
+        },
+        buildSummaryPipeline () {
+          return {};
+        },
+      };
+
+      // Mock Request object
+      const mockReq = {
+        params: {
+          member: true,
+          start: new Date(),
+          end: new Date(),
+        },
+      };
+
+      // Mock response object
+      const mockRes = {
+        status (statusCode) {
+          expect(statusCode).toEqual(400);
+          return {
+            send (error) {
+              expect(error).toEqual(`Error: ${aggregateErrorMessage}`);
+              done();
+            },
+          };
+        },
+      };
+
+      getTransactionSummary(validArgs)(mockReq, mockRes);
+    });
+
+    it('should return correct transcation summary', done => {
+      // Valid mocked args
+      const validArgs = {
+        TransactionsModel: {
+          async aggregate () {
+            return [{ valid: true }];
+          },
+        },
+        mongoose: {
+          Types: {
+            ObjectId: true,
+          },
+        },
+        buildSummaryQuery () {
+          return [];
+        },
+        buildSummaryPipeline () {
+          return {};
+        },
+      };
+
+      // Mock Request object
+      const mockReq = {
+        params: {
+          member: true,
+          start: new Date(),
+          end: new Date(),
+        },
+      };
+
+      // Mock response object
+      const mockRes = {
+        json (summary) {
+          expect(summary.valid).toEqual(true);
+          done();
+        },
+      };
+
+      getTransactionSummary(validArgs)(mockReq, mockRes);
+    });
+  });
 });
