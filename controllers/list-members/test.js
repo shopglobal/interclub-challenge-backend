@@ -7,7 +7,7 @@
 const { getMembersList } = require('.'); // Require from index of curent dir
 
 describe('list-members module', () => {
-  describe('list-members function', () => {
+  describe('getMembersList function', () => {
     it('should be a function', () => {
       expect(typeof getMembersList).toEqual('function');
     });

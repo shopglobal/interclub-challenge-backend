@@ -7,7 +7,7 @@
 const { getTransactionsList } = require('.'); // Require from index of curent dir
 
 describe('list-transactions module', () => {
-  describe('list-transactions function', () => {
+  describe('getTransactionsList function', () => {
     it('should be a function', () => {
       expect(typeof getTransactionsList).toEqual('function');
     });
