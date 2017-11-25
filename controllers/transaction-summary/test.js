@@ -65,7 +65,8 @@ describe('transaction-summary module', () => {
         buildSummaryQuery({});
       }
 
-      expect(buildSummaryQueryWihtoutMemberId).toThrow('Member ID was not provided');
+      expect(buildSummaryQueryWihtoutMemberId)
+        .toThrow('Member ID was not provided');
     });
 
     it('should return missing ObjectId error', () => {
@@ -73,7 +74,8 @@ describe('transaction-summary module', () => {
         buildSummaryQuery({ member: true });
       }
 
-      expect(buildSummaryQueryWihtoutMemberId).toThrow('ObjectId instance was not provided');
+      expect(buildSummaryQueryWihtoutMemberId)
+        .toThrow('ObjectId instance was not provided');
     });
 
     it('should return missing start date error', () => {
@@ -81,7 +83,8 @@ describe('transaction-summary module', () => {
         buildSummaryQuery({ member: true, ObjectId: true, end: new Date() });
       }
 
-      expect(buildSummaryQueryWihtoutMemberId).toThrow('Start and end date have to be provided');
+      expect(buildSummaryQueryWihtoutMemberId)
+        .toThrow('Start and end date have to be provided');
     });
 
     it('should return missing end date error', () => {
@@ -89,7 +92,8 @@ describe('transaction-summary module', () => {
         buildSummaryQuery({ member: true, ObjectId: true, start: new Date() });
       }
 
-      expect(buildSummaryQueryWihtoutMemberId).toThrow('Start and end date have to be provided');
+      expect(buildSummaryQueryWihtoutMemberId)
+        .toThrow('Start and end date have to be provided');
     });
 
     it('should return return query with only objectId', () => {
@@ -121,11 +125,93 @@ describe('transaction-summary module', () => {
       const start = new Date();
 
       // Get summary query from mocked data
-      const [memberObject, startObject, endObject] = buildSummaryQuery({ member: memberId, ObjectId, start, end });
+      const [memberObject, startObject, endObject] =
+        buildSummaryQuery({ member: memberId, ObjectId, start, end });
 
       expect(memberObject.member.id).toEqual(memberId);
       expect(startObject.date.$gte).toEqual(start);
       expect(endObject.date.$lte).toEqual(end);
+    });
+  });
+
+  describe('buildSummaryPipeline function', () => {
+    it('should be a function', () => {
+      expect(typeof buildSummaryPipeline).toEqual('function');
+    });
+
+    it('should return missing query error', () => {
+      function buildSummaryPipelineWihtoutQueryPipe () {
+        buildSummaryPipeline();
+      }
+
+      expect(buildSummaryPipelineWihtoutQueryPipe)
+        .toThrow('Query must be provided');
+    });
+
+    it('should return built pipeline', () => {
+      const member = 'memberId';
+
+      const queryPipe = {
+        $match: {
+          $or: [
+            { member },
+          ],
+        },
+      };
+
+      const expectedObject = [
+        queryPipe,
+        {
+          $group: {
+            _id: '$member',
+            amountIncome: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: ['$type', 'income'],
+                  },
+                  then: 1,
+                  else: 0,
+                },
+              },
+            },
+            amountExpense: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: ['$type', 'expense'],
+                  },
+                  then: 1,
+                  else: 0,
+                },
+              },
+            },
+            totalIncome: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: ['$type', 'income'],
+                  },
+                  then: '$amount',
+                  else: 0,
+                },
+              },
+            },
+            totalExpense: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: ['$type', 'expense'],
+                  },
+                  then: '$amount',
+                  else: 0,
+                },
+              },
+            },
+          },
+        }];
+
+      expect(buildSummaryPipeline(queryPipe)).toMatchObject(expectedObject);
     });
   });
 });
