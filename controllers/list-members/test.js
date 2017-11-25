@@ -57,7 +57,7 @@ describe('list-members module', () => {
         },
       };
 
-      getMembersList(MembersModelMock)({}, mockedResFunction);
+      getMembersList(MembersModelMock)({ query: {} }, mockedResFunction);
     });
 
     it('should catch error', done => {
@@ -80,7 +80,7 @@ describe('list-members module', () => {
         },
       };
 
-      getMembersList(MembersModelMock)({}, mockedResFunction);
+      getMembersList(MembersModelMock)({ query: {} }, mockedResFunction);
     });
   });
 });
