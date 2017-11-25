@@ -1,5 +1,7 @@
 ## Interclub Challenge - Backend
 
+[![Build Status](https://travis-ci.org/midyan/interclub-challenge-backend.svg?branch=master)](https://travis-ci.org/midyan/interclub-challenge-backend)
+
 To get started:
 1. MongoDB 3.4+ must be running on standard port 27017
 2. yarn install
