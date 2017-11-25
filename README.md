@@ -5,3 +5,8 @@ To get started:
 2. yarn install
 3. Create fake database entries: yarn run fake-data
 4. To run the server: yarn run start
+
+To run tests simply do:
+```
+  yarn test
+```
