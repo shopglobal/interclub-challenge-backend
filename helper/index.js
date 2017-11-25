@@ -5,16 +5,16 @@
  * @param  {Function} routers              Router function at the end of folder branch
  * @param  {String} [previousEndpoint='/'] Endpoint of previous branch
  */
-function assignRouteDynamicaly (app, routers, previousEndpoint = '/') {
+function assignEndpointRoutersDynamicaly (app, routers, previousEndpoint = '/') {
   Object.keys(routers).forEach(endpoint => {
     const router = routers[endpoint];
     if (!Array.isArray() && typeof router === 'object') {
-      return assignRouteDynamicaly(app, router, endpoint);
+      return assignEndpointRoutersDynamicaly(app, router, endpoint);
     }
     return app.use(`/${previousEndpoint}`, router);
   });
 }
 
 module.exports = {
-  assignRouteDynamicaly,
+  assignEndpointRoutersDynamicaly,
 };
