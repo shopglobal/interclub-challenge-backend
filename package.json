@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "./node_modules/.bin/jest",
+    "test": "./node_modules/.bin/jest --verbose",
     "fake-data": "node create-fake-members.js"
   },
   "author": "",

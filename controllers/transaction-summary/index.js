@@ -122,6 +122,13 @@ function buildSummaryPipeline (queryPipe) {
 }
 
 function buildSummaryQuery ({ member, start, end, ObjectId }) {
+  if (!member) throw new Error('Member ID was not provided');
+  if (!ObjectId) throw new Error('ObjectId instance was not provided');
+
+  if ((start && !end) || (!start && end)) {
+    throw new Error('Start and end date have to be provided');
+  }
+
   const query = [
     { member: new ObjectId(member) },
   ];
