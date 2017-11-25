@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "9"
+
+#Services
+services:
+  - mongodb
+
+#Test script
+script: yarn test
