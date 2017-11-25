@@ -13,9 +13,9 @@ function getTransactionsList (TranscationsModel) {
     // Define transactions variable
     let transactions = TranscationsModel.find({});
 
-    if (sort) transactions = transactions.sort(sort);
-    if (skip) transactions = transactions.skip(skip);
-    if (limit) transactions = transactions.limit(limit);
+    if (sort) transactions = transactions.sort(JSON.parse(sort));
+    if (skip) transactions = transactions.skip(parseInt(skip, 10));
+    if (limit) transactions = transactions.limit(parseInt(limit, 10));
 
     // Try to fetch transactions
     try {

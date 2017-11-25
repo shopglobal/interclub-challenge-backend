@@ -6,18 +6,23 @@ const router = express.Router();
 
 // Import modules
 const TransactionsModel = require('../../models/transactions');
-const { getTransactionSummary, idNotProvided, buildSummaryPipeline, buildSummaryQuery } =
-  require('../../controllers/transaction-summary');
+const {
+  getTransactionSummary,
+  idNotProvided,
+  buildSummaryPipeline,
+  buildSummaryQuery,
+} = require('../../controllers/transaction-summary');
 
+// Consign function export
 module.exports = function () {
   router.get(
-    '/transaction-summary/:member/:start/:end',
-    getTransactionSummary({ buildSummaryPipeline, buildSummaryQuery, TransactionsModel, mongoose })
-  );
-
-  router.get(
     '/transaction-summary/:member',
-    getTransactionSummary({ buildSummaryPipeline, buildSummaryQuery, TransactionsModel, mongoose })
+    getTransactionSummary({
+      buildSummaryPipeline,
+      buildSummaryQuery,
+      TransactionsModel,
+      mongoose,
+    })
   );
 
   router.get('/list-transactions', idNotProvided);
