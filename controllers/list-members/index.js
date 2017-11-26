@@ -27,6 +27,7 @@ function getMembersList (MembersModel) {
         first_name: member.first_name,
         last_name: member.last_name,
         number: member.number,
+        email: member.email,
       };
     });
 

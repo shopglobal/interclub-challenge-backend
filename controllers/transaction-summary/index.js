@@ -18,11 +18,23 @@ function getTransactionSummary ({
 
   const { ObjectId } = mongoose.Types;
 
+
   return async function (req, res, transactionSummary = {}) {
     // Define members variable
-    const { member, start, end } = req.params;
+    const { member } = req.params;
+    const { start, end } = req.query;
 
     if (!member) return res.status(400).send('Error: Member ID is missing');
+
+    const noTranscationsResponse = [
+      {
+        _id: member,
+        amountIncome: 0,
+        amountExpense: 0,
+        totalIncome: 0,
+        totalExpense: 0,
+      },
+    ];
 
     // Try to build query and fetch transaction summary
     try {
@@ -41,7 +53,7 @@ function getTransactionSummary ({
 
     // Aggregate pipeline's $group operator returns an array inside an array.
     // So we need the extract the only object left inside.
-    return res.json(transactionSummary[0]);
+    return res.json(transactionSummary[0] || noTranscationsResponse);
   };
 }
 

@@ -252,6 +252,8 @@ describe('transaction-summary module', () => {
       const mockReq = {
         params: {
           member: false,
+        },
+        query: {
           start: new Date(),
           end: new Date(),
         },
@@ -300,6 +302,8 @@ describe('transaction-summary module', () => {
       const mockReq = {
         params: {
           member: true,
+        },
+        query: {
           start: new Date(),
           end: new Date(),
         },
@@ -344,10 +348,12 @@ describe('transaction-summary module', () => {
 
       // Mock Request object
       const mockReq = {
-        params: {
-          member: true,
+        query: {
           start: new Date(),
           end: new Date(),
+        },
+        params: {
+          member: true,
         },
       };
 
